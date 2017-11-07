@@ -1,4 +1,12 @@
-.idea
-*.iml
-target
+.DS_Store
 classes
+_data
+target
+.idea
+*.prefs
+*.project
+*.classpath
+*.rar
+.settings
+*.iml
+
