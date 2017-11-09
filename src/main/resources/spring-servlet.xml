@@ -7,14 +7,12 @@
     <!-- enable spring mvc annotation -->
     <context:annotation-config />
 
-    <context:component-scan base-package="com.giftroom">
+    <context:component-scan base-package="cn.tommyyang.haoyan">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
     </context:component-scan>
 
-    <context:component-scan base-package="com.giftroom.controller"></context:component-scan>
-
-    <context:component-scan base-package="com.giftroom.controller.UserApi"></context:component-scan>
+    <context:component-scan base-package="cn.tommyyang.haoyan"></context:component-scan>
 
     <!-- view resolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
