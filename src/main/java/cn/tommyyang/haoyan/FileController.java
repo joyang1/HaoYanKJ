@@ -1,19 +1,18 @@
 package cn.tommyyang.haoyan;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by tommy on 2017/11/9.
@@ -24,7 +23,7 @@ public class FileController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(BaseController.class);
 
-    @RequestMapping(value = "/uploadfile.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadfile1.do", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> uploadFile(HttpServletRequest request, HttpServletResponse response,
                                           @RequestParam(value = "photo", required = false) String photo) {
@@ -51,6 +50,30 @@ public class FileController extends BaseController {
             outStream.write(img);
             outStream.flush();
             outStream.close();
+            return renderData(response, "sucess");
+        } catch (Exception e) {
+            logger.error("file upload error:\n", e);
+            return renderErrorData(response, 500, e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/uploadfile.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> uploadFile(HttpServletRequest request, HttpServletResponse response,
+                                          @RequestParam(value = "fileimg", required = false) MultipartFile fileimg) {
+        try {
+            String tmpPath = request.getRealPath("/") + "temp";
+            File dir = new File(tmpPath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            logger.info(String.format("上传图片的路径是:%s", tmpPath));
+            String filePath = tmpPath + "/" + UUID.randomUUID().toString().replaceAll("-", "") + ".png";
+            File file = new File(filePath);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            fileimg.transferTo(file);
             return renderData(response, "sucess");
         } catch (Exception e) {
             logger.error("file upload error:\n", e);
