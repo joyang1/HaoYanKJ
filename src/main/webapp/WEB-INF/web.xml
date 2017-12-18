@@ -2,6 +2,8 @@
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <!-- WebSocket 需要Servlet3.0 需要web.xml 3.0及以上，并要配置此 -->
+    <absolute-ordering />
     <context-param>
         <param-name>webAppRootKey</param-name>
         <param-value>haoyan.root</param-value>
@@ -44,6 +46,7 @@
             <param-value>classpath:spring-servlet.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
+        <async-supported>true</async-supported>
     </servlet>
 
     <servlet-mapping>
