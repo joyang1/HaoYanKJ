@@ -24,7 +24,7 @@
     <tr><td colspan="2"><button style="width:100%;" id="close">断开</button></td></tr>
     <tr>
         <td>昵称</td>
-        <td><input type="text" id="nickName"/></td>
+        <td><input type="text" id="nickName" value="tommy"/></td>
     </tr>
     <tr>
         <td>状态</td>
@@ -43,7 +43,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var self = this;
-        var sockjsAddr = "ws://lcoalhost:8080/hello/nickname";
+        var sockjsAddr = "/hello/nickname";
         var sockjsClient = null;
 
         var onopen = function() {
@@ -63,18 +63,23 @@
             $("#status").val("未连接");
         };
 
-        $("#connect").click(function() {
-            var nickName = $.trim($("#nickName").val());
-            if (nickName.length <= 0) {
-                alert("请先填写昵称");
-                return ;
-            }
-            $("#status").val("正在连接中...");
-            sockjsClient = new WebSocket(sockjsAddr + "/" + nickName);
-            sockjsClient.onopen = onopen;
-            sockjsClient.onmessage = onmessage;
-            sockjsClient.onclose = onclose;
-        });
+//        $("#connect").click(function() {
+//            var nickName = $.trim($("#nickName").val());
+//            if (nickName.length <= 0) {
+//                alert("请先填写昵称");
+//                return ;
+//            }
+//            $("#status").val("正在连接中...");
+//            sockjsClient = new SockJS(sockjsAddr + "/" + nickName);
+//            sockjsClient.onopen = onopen;
+//            sockjsClient.onmessage = onmessage;
+//            sockjsClient.onclose = onclose;
+//        });
+        var nickName = $.trim($("#nickName").val());
+        sockjsClient = new SockJS(sockjsAddr + "/" + nickName);
+        sockjsClient.onopen = onopen;
+        sockjsClient.onmessage = onmessage;
+        sockjsClient.onclose = onclose;
 
         $("#close").click(function() {
             if (sockjsClient != null) {

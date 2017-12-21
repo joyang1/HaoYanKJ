@@ -46,6 +46,22 @@ public class HelloHandler extends TextWebSocketHandler{
         }
     }
 
+    public void broadcast(final TextMessage message) throws IOException {
+        Set<String> sessionIDs = socketClients.keySet();
+        Iterator<String> i = sessionIDs.iterator();
+        while(i.hasNext()) {
+            String sessionID = i.next();
+            WebSocketClient client = socketClients.get(sessionID);
+            WebSocketSession clientSession = client.getSocketSession();
+            try {
+                clientSession.sendMessage(message);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session)
             throws Exception {
