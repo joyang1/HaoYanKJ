@@ -37,6 +37,9 @@
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
+    <listener>
+        <listener-class>cn.tommyyang.haoyan.socket.ReceiveSocketListener</listener-class>
+    </listener>
 
     <servlet>
         <servlet-name>spring-mvc</servlet-name>
