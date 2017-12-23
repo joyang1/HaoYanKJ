@@ -18,19 +18,6 @@
 
     <context:component-scan base-package="cn.tommyyang.haoyan.controller"></context:component-scan>
 
-    <!-- websocket消息处理bean -->
-    <bean id="helloHandler" class="cn.tommyyang.haoyan.websocket.hello.HelloHandler"/>
-    <websocket:handlers>
-        <!-- 配置消息处理bean和路径的映射关系 -->
-        <websocket:mapping path="/hello/nickname/{nickName}" handler="helloHandler"/>
-        <!-- 配置握手拦截器 -->
-        <websocket:handshake-interceptors>
-            <bean class="cn.tommyyang.haoyan.websocket.hello.HandShakeInterceptor"/>
-        </websocket:handshake-interceptors>
-        <!-- 开启sockjs，去掉则关闭sockjs -->
-        <websocket:sockjs/>
-    </websocket:handlers>
-
     <!-- view resolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/"></property>

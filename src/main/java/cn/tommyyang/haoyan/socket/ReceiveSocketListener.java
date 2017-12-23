@@ -4,13 +4,18 @@ import cn.tommyyang.haoyan.common.SpringBeanFactory;
 import cn.tommyyang.haoyan.websocket.hello.HelloHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.socket.TextMessage;
+import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.awt.*;
+import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,8 +26,6 @@ import java.net.Socket;
 public class ReceiveSocketListener implements ServletContextListener{
 
     private final static Logger logger = LoggerFactory.getLogger(ReceiveSocketListener.class);
-    private HelloHandler helloHandler = SpringBeanFactory.getBean(HelloHandler.class);
-    private ServerSocket serverSocket;
     private SocketThread socketThread;
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
@@ -39,21 +42,27 @@ public class ReceiveSocketListener implements ServletContextListener{
     }
 
     class SocketThread extends Thread{
-
+        private HelloHandler helloHandler = SpringBeanFactory.getBean("helloHandler");
+        private ServerSocket serverSocket;
+        SocketThread(){
+            try {
+                serverSocket = new ServerSocket(6000);
+            } catch (IOException e) {
+                logger.error("new ServerSocket(6000) error:\n", e);
+            }
+        }
         public void run() {
             while (!this.isInterrupted()){
                 try {
-                    serverSocket = new ServerSocket(6000);
                     Socket socket = serverSocket.accept();
                     InputStream inputStream = socket.getInputStream();
-                    Image image = ImageIO.read(inputStream);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    byte[] bytes = new byte[1024];
-                    int length = 0;
-                    while ((length = inputStream.read(bytes, 0, 1024))> 0){
-                        outputStream.write(bytes, 0, length);
-                    }
-                    TextMessage textMessage = new TextMessage(outputStream.toByteArray());
+                    RenderedImage image = ImageIO.read(inputStream);
+                    ImageIO.write(image,"png", outputStream);
+                    byte[] bytes = outputStream.toByteArray();
+                    BASE64Encoder encoder = new BASE64Encoder();
+                    String imgBase64Code = "data:image/png;base64," + encoder.encode(bytes);
+                    TextMessage textMessage = new TextMessage(imgBase64Code);
                     helloHandler.broadcast(textMessage);
                 }catch (Exception e){
                     logger.error("socket error:\n",e);

@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
     <context:component-scan base-package="cn.tommyyang.haoyan">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
@@ -15,6 +16,19 @@
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <!--<property name="location" value="classpath:datasource.properties,classpath:jdbc.properties" />-->
     </bean>
+
+    <!-- websocket消息处理bean -->
+    <bean id="helloHandler" class="cn.tommyyang.haoyan.websocket.hello.HelloHandler"/>
+    <websocket:handlers>
+        <!-- 配置消息处理bean和路径的映射关系 -->
+        <websocket:mapping path="/hello/nickname/{nickName}" handler="helloHandler"/>
+        <!-- 配置握手拦截器 -->
+        <websocket:handshake-interceptors>
+            <bean class="cn.tommyyang.haoyan.websocket.hello.HandShakeInterceptor"/>
+        </websocket:handshake-interceptors>
+        <!-- 开启sockjs，去掉则关闭sockjs -->
+        <websocket:sockjs/>
+    </websocket:handlers>
 
     <!--<import resource="spring-mybatis.xml"/>-->
 
