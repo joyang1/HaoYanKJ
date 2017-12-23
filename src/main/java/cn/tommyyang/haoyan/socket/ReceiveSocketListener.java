@@ -30,6 +30,7 @@ public class ReceiveSocketListener implements ServletContextListener{
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         if(socketThread == null){
+            logger.info("init socketThread");
             socketThread = new SocketThread();
             socketThread.start();
         }
@@ -46,6 +47,7 @@ public class ReceiveSocketListener implements ServletContextListener{
         private ServerSocket serverSocket;
         SocketThread(){
             try {
+                logger.info("new ServerSocket");
                 serverSocket = new ServerSocket(6000);
             } catch (IOException e) {
                 logger.error("new ServerSocket(6000) error:\n", e);

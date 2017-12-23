@@ -54,7 +54,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var self = this;
-        var sockjsAddr = "/hello/nickname";
+        //var sockjsAddr = "ws://tommyyang.cn:8090/HaoYanKJ/hello/nickname";
+        var sockjsAddr = "/HaoYanKJ/hello/nickname";
+        //var sockjsAddr = "ws://localhost:8080/hello/nickname";
         var sockjsClient = null;
         var canvas = document.getElementById("canvas");
         var context = canvas.getContext("2d");
@@ -68,7 +70,7 @@
 //            $("#img").attr("src",e.data);
             var image = new Image();
             image.onload = function() {
-                context.drawImage(image, 0, 0, 375, 180);
+                context.drawImage(image, 0, 0, 775, 580);
             };
             image.src = e.data;
 //            window.setInterval(function(){
@@ -81,6 +83,7 @@
         };
         var nickName = $.trim($("#nickName").val());
         sockjsClient = new SockJS(sockjsAddr + "/" + nickName);
+        //sockjsClient = new WebSocket(sockjsAddr + "/" + nickName+".do");
         sockjsClient.onopen = onopen;
         sockjsClient.onmessage = onmessage;
         sockjsClient.onclose = onclose;
