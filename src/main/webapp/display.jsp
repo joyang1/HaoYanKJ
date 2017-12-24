@@ -7,9 +7,12 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<%
+    String webRoot = "/HaoYanKJ";
+%>
 <head>
     <title>照片墙</title>
-    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="<%=webRoot%>/js/jquery-3.2.1.min.js"></script>
     <style type="text/css">
         .img{
             width: 300px;

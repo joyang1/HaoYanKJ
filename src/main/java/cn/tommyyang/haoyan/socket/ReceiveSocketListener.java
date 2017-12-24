@@ -60,12 +60,16 @@ public class ReceiveSocketListener implements ServletContextListener{
                     InputStream inputStream = socket.getInputStream();
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     RenderedImage image = ImageIO.read(inputStream);
-                    ImageIO.write(image,"png", outputStream);
-                    byte[] bytes = outputStream.toByteArray();
-                    BASE64Encoder encoder = new BASE64Encoder();
-                    String imgBase64Code = "data:image/png;base64," + encoder.encode(bytes);
-                    TextMessage textMessage = new TextMessage(imgBase64Code);
-                    helloHandler.broadcast(textMessage);
+                    inputStream.close();
+                    if(image != null){
+                        ImageIO.write(image,"png", outputStream);
+                        byte[] bytes = outputStream.toByteArray();
+                        BASE64Encoder encoder = new BASE64Encoder();
+                        String imgBase64Code = "data:image/png;base64," + encoder.encode(bytes);
+                        TextMessage textMessage = new TextMessage(imgBase64Code);
+                        helloHandler.broadcast(textMessage);
+                    }
+                    socket.close();
                 }catch (Exception e){
                     logger.error("socket error:\n",e);
                 }

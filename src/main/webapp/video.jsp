@@ -12,11 +12,14 @@
 
 <!DOCTYPE html>
 <html>
+<%
+    String webRoot = "/HaoYanKJ";
+%>
 <head>
     <title>Chart</title>
     <meta charset="utf-8" />
     <script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
-    <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+    <script src="<%=webRoot%>/js/jquery-3.2.1.min.js"></script>
     <style type="text/css">
         html,body{
             position: relative;
@@ -56,6 +59,7 @@
         var self = this;
         //var sockjsAddr = "ws://tommyyang.cn:8090/HaoYanKJ/hello/nickname";
         var sockjsAddr = "/HaoYanKJ/hello/nickname";
+        //var sockjsAddr = "/hello/nickname";
         //var sockjsAddr = "ws://localhost:8080/hello/nickname";
         var sockjsClient = null;
         var canvas = document.getElementById("canvas");
